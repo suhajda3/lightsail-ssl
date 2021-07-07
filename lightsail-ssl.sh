@@ -65,7 +65,7 @@ then
   domain=${1}
 else
   echo "What is your domain name? [example.com]"
-  read -r domain
+  read -r domain < /dev/tty
 fi
 
 # Set the proper hostname for the instance
@@ -80,7 +80,7 @@ then
   email=${2}
 else
   echo "What is your Email address? [email@email.com]"
-  read -r email
+  read -r email < /dev/tty
 fi
 
 # Update package list
