@@ -20,7 +20,7 @@
 #                Print version number
 #
 
-version="1.1"
+version="1.1.1"
 date_format="%Y/%m/%d %T"
 
 # Message function
@@ -125,9 +125,9 @@ fi
 
 # Replace the certificate
 message "INFO" "Configuring webserver with the new certificate"
-if [ -f /opt/bitnami/apache/conf/server.crt ]
+if [ -f /opt/bitnami/apache/conf/bitnami/certs/server.crt ]
 then
-  crt_location="/opt/bitnami/apache/conf/"
+  crt_location="/opt/bitnami/apache/conf/bitnami/certs/"
 elif [ -f /opt/bitnami/apache2/conf/server.crt ]
 then
   crt_location="/opt/bitnami/apache2/conf/"
