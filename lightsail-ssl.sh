@@ -20,7 +20,7 @@
 #                Print version number
 #
 
-version="1.0"
+version="1.1"
 date_format="%Y/%m/%d %T"
 
 # Message function
@@ -125,10 +125,24 @@ fi
 
 # Replace the certificate
 message "INFO" "Configuring webserver with the new certificate"
-mv /opt/bitnami/apache2/conf/server.crt /opt/bitnami/apache2/conf/server.crt.old
-mv /opt/bitnami/apache2/conf/server.key /opt/bitnami/apache2/conf/server.key.old
-ln --symbolic --force /opt/bitnami/letsencrypt/certificates/"${domain}".key /opt/bitnami/apache2/conf/server.key
-ln --symbolic --force /opt/bitnami/letsencrypt/certificates/"${domain}".crt /opt/bitnami/apache2/conf/server.crt
+if [ -f /opt/bitnami/apache/conf/server.crt ]
+then
+  crt_location="/opt/bitnami/apache/conf/"
+elif [ -f /opt/bitnami/apache2/conf/server.crt ]
+then
+  crt_location="/opt/bitnami/apache2/conf/"
+else
+  message "INFO" "Starting Bitnami services"
+  /opt/bitnami/ctlscript.sh start
+  cleanup
+  message "ERROR" "Old Apache certificate could not be located"
+  echo "Done"
+  exit 2
+fi
+mv "${crt_location}"server.crt "${crt_location}"server.crt.old
+mv "${crt_location}"server.key "${crt_location}"server.key.old
+ln --symbolic --force /opt/bitnami/letsencrypt/certificates/"${domain}".key "${crt_location}"server.key
+ln --symbolic --force /opt/bitnami/letsencrypt/certificates/"${domain}".crt "${crt_location}"server.crt
 chown root:root /opt/bitnami/apache2/conf/server*
 chmod 600 /opt/bitnami/apache2/conf/server*
 
